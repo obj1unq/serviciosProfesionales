@@ -1,6 +1,7 @@
 class EmpresaDeServicios {
 	var profesionales = []
-	var property honorarioReferencia 
+	var property honorarioReferencia
+	var clientes = #{} 
 	
 	method contratarProf(prof) { profesionales.add(prof) }
 	method despedirProf(prof) { profesionales.remove(prof) }
@@ -16,5 +17,12 @@ class EmpresaDeServicios {
 		}
 	}
 
-	method puedeSatisfacer(solicitante) = profesionales.any { prof => solicitante.puedeSerAtendide(prof) }	
+	method puedeSatisfacer(solicitante) = profesionales.any { prof => solicitante.puedeSerAtendide(prof) }
+	
+	method darServicio(solicitante) {
+		if (not self.puedeSatisfacer(solicitante)) { self.error("no se puede dar servicio al solicitante indicado") }
+		const profElegido = profesionales.find { prof => solicitante.puedeSerAtendide(prof) }
+		profElegido.cobrar(profElegido.honorariosPorHora())
+		clientes.add(solicitante)
+	}	
 }
